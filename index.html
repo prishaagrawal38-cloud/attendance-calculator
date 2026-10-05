@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Calculator</title>
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0d111b;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container {
+    width: 95%;
+    max-width: 750px;
+    text-align: center;
+}
+.icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+.calc-box {
+    background-color:#111827;
+    padding: 35px;
+    border-radius: 15px;
+    text-align: left;
+    border: 2px solid #293654;
+}
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    margin-top:20px;
+    font-size: 16px;
+}
+input, select {
+width: 100%;
+padding: 12px 16px;
+background-color: #111827;
+color: #fff;
+border: 2px solid #3a496b;
+border-radius: 12px;
+font-size: 18px;
+}
+input::placeholder {
+    color: #8995b3;
+}
+select {
+    cursor: pointer;    
+
+}
+button {
+    width: 100%;
+    padding: 14px;  
+    margin-top: 30px;
+    background-color:#5548ff;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;    
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #6975ff;
+}
+.result {
+    margin-top: 25px;
+    padding: 10px 0 0 0;
+    font-size: 20px;
+    line-height: 2;
+    color: #fff;
+}
+.status-pass {
+    color: #55e89b;
+}
+.status-fail {
+    color: #ff6464;
+}
+@media (max-width: 600px){
+    h1{
+        font-size: 35px;
+    }
+    .subtitle{
+        font-size: 18px;
+    }
+    .calc-box{
+        padding: 25px;
+    }
+    .result{
+        padding: 25px;
+    }
+}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="icon">📊</div>
+<h1>Attendance Calculator</h1>
+<div class="calc-box">
+    <div class="input-section">
+        <label for="classesAttended">Classes Attended:</label>
+        <input type="number" id="classesAttended" placeholder="e.g.,15" min="0">
+        
+<label for="totalClasses">Total Classes:</label>
+<input type="number" id="totalClasses" placeholder="e.g.,20" min="0">
+
+<label for="targetAttendance">Target Attendance (%):</label>
+<input type="number" id="targetAttendance" placeholder="e.g.,75" min="0" max="100">
+
+<button id="calculateBtn">Calculate Attendance</button>
+</div>
+<div class="result-section">
+<div id="result"></div>
+</div>
+</div>
+</div>
+<script>
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+    
+    let total = parseInt(document.getElementById('totalClasses').value);
+let attended = parseInt(document.getElementById('classesAttended').value);
+let target =parseFloat(document.getElementById('targetAttendance').value);
+
+
+    let result = document.getElementById('result');
+   
+    if (isNaN(attended) || isNaN(total) || isNaN(target)) {
+        alert("Please enter numbers in all calculation fields.");
+        return;
+    }
+
+    if (attended > total) {
+        alert("Classes attended cannot be greater than total classes.");
+        return;
+    }
+
+    if (total <= 0) {
+        alert("Total classes must be greater than 0.");
+        return;
+    }
+
+    if (target < 0 || target > 100) {
+        alert("Target attendance must be between 0 and 100.");
+        return;
+    }
+ let current = (attended / total) * 100;
+    if (current >= target) {
+        let skip = Math.floor((100 * attended - target * total) / target);
+      result.innerHTML=
+      "Current Attendance: " +
+      current.toFixed(2) + "%<br>" +
+      "You can skip " +
+      skip +
+      " more classes and still maintain your target attendance.";
+      result.className = "result status-pass";
+    }
+    else {
+        let need = Math.ceil(
+            (target/100*total - attended)/
+            (1-target/100)
+        );
+    
+    result.innerHTML=
+    "Current Attendance: " +
+    current.toFixed(2) + "%<br>" +
+    "You need to attend " +
+    need +
+    " more classes.";
+
+    result.className="result status-fail";
+}
+    });
+</script>
+</body>
+</html>
